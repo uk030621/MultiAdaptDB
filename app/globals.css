@@ -1,0 +1,19 @@
+@import "tailwindcss";
+.bg-background {
+  position: relative; /* Ensure container position */
+}
+
+.bg-background::before {
+  content: ""; /* Create a pseudo-element for the background */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("otherbg.jpg"); /* Your image URL */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.4; /* Apply opacity only to the background */
+  z-index: -1; /* Place pseudo-element behind content */
+}
