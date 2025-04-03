@@ -50,30 +50,60 @@ export async function POST(req) {
 // Update an existing field
 export async function PUT(req) {
   const session = await getServerSession(authOptions);
-  if (!session) return new Response("Unauthorized", { status: 401 });
-
-  const client = await clientPromise;
-  const db = client.db(DB_NAME);
-  const { id, _id, ...updatedField } = await req.json(); // Exclude `_id`
+  if (!session) {
+    console.error("❌ Unauthorized request");
+    return new Response("Unauthorized", { status: 401 });
+  }
 
   try {
-    // Update the field in the fields collection
-    const result = await db
-      .collection(FIELDCOLLECTION_NAME)
-      .updateOne({ _id: new ObjectId(id) }, { $set: updatedField });
+    const client = await clientPromise;
+    const db = client.db(DB_NAME);
+    const { id, _id, ...updatedField } = await req.json(); // Exclude `_id`
+
+    console.log("📩 Received PUT request body:", { id, updatedField });
+
+    if (!id) {
+      console.error("❌ Missing ID in request");
+      return new Response(JSON.stringify({ error: "Missing field ID" }), {
+        status: 400,
+      });
+    }
+
+    let objectId;
+    if (ObjectId.isValid(id)) {
+      objectId = new ObjectId(id); // Convert valid string to ObjectId
+    }
+
+    console.log(
+      "🚀 Searching for field to update with queries:",
+      [
+        { _id: id }, // If stored as string
+        objectId ? { _id: objectId } : null, // If stored as ObjectId
+      ].filter(Boolean)
+    );
+
+    // ✅ Update using BOTH string and ObjectId formats
+    const result = await db.collection(FIELDCOLLECTION_NAME).updateOne(
+      {
+        $or: [{ _id: id }, objectId ? { _id: objectId } : null].filter(Boolean),
+      },
+      { $set: updatedField }
+    );
 
     if (result.matchedCount === 0) {
+      console.error("❌ Field not found:", id);
       return new Response(JSON.stringify({ error: "Field not found" }), {
         status: 404,
       });
     }
 
+    console.log("✅ Field updated successfully:", id);
     return new Response(
       JSON.stringify({ message: "Field updated successfully" }),
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error updating field:", error);
+    console.error("🔥 Error updating field:", error);
     return new Response(JSON.stringify({ error: "Failed to update field" }), {
       status: 500,
     });
