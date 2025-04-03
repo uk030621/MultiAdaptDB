@@ -97,13 +97,13 @@ export default function Home() {
       <h1 className="text-slate-900 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-2">
         Adaptable Database System
       </h1>
-      <Image
+      {/*<Image
         src="/Adb.png" // Replace with your image path
         alt="Database Icon"
         width={120} // Adjust width as needed
         height={120} // Adjust height as needed
         className="bg-transparent mb-1 mt-1"
-      />
+      />*/}
       <div className="mt-2 mb-3 px-4">
         <button
           onClick={() => setShowGuide(!showGuide)}
@@ -227,7 +227,7 @@ export default function Home() {
 
               {/* Buttons side by side */}
               <div className="flex space-x-4">
-                <h2 className="text-blue-700 self-center">Pages:</h2>
+                {/*<h2 className="text-blue-700 self-center">Pages:</h2>*/}
                 {/* Conditional logic for routes */}
                 <Link href={index === 0 ? `/fields` : `/fields${index + 1}`}>
                   <button className="text-sm px-4 py-2 bg-slate-700 hover:bg-slate-500 text-white rounded">
@@ -286,7 +286,7 @@ export default function Home() {
           </div>*/}
           <button
             onClick={() => signOut()}
-            className="w-3/5  text-sm mt-4 px-4 py-2 bg-red-700 hover:bg-red-500 text-white rounded"
+            className="w-3/4  text-sm mt-4 px-4 py-2 bg-red-700 hover:bg-red-500 text-white rounded"
           >
             Sign Out
           </button>
