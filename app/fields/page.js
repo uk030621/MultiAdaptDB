@@ -200,7 +200,7 @@ export default function Fields() {
                     options: e.target.value.split(",").map((opt) => opt.trim()),
                   })
                 }
-                className="border p-2 rounded w-full mt-2"
+                className="bg-white border p-2 rounded w-full mt-2"
               />
             </div>
           )}
