@@ -194,12 +194,22 @@ export default function Fields() {
                 type="text"
                 placeholder="Comma-separated options"
                 value={newField.options.join(", ")}
-                onChange={(e) =>
-                  setNewField({
-                    ...newField,
-                    options: e.target.value.split(",").map((opt) => opt.trim()),
-                  })
-                }
+                onChange={(e) => {
+                  const value = e.target.value;
+
+                  // Only split when a comma is explicitly typed
+                  if (value.endsWith(",")) {
+                    setNewField((prevField) => ({
+                      ...prevField,
+                      options: [...prevField.options, ""], // Add an empty option
+                    }));
+                  } else {
+                    setNewField((prevField) => ({
+                      ...prevField,
+                      options: value.split(",").map((opt) => opt.trim()), // Trim spaces
+                    }));
+                  }
+                }}
                 className="bg-white border p-2 rounded w-full mt-2"
               />
             </div>
