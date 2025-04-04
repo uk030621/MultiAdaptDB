@@ -3,7 +3,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-//import Image from "next/image";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 export default function Fields() {
@@ -17,45 +16,43 @@ export default function Fields() {
   const [editingField, setEditingField] = useState(null);
   const [dbName, setDbName] = useState("");
 
-  // Fetch the database name for this page
+  // ✨ New: Temporary input values for "select" fields
+  const [newFieldTempValue, setNewFieldTempValue] = useState("");
+  const [editingFieldTempValue, setEditingFieldTempValue] = useState("");
+
   useEffect(() => {
     fetch("/api/dbnames")
       .then((res) => res.json())
       .then((data) => {
-        const dbIndex = 2; // Assuming this is for "Database 1"
+        const dbIndex = 2;
         setDbName(data.dbNames[dbIndex]?.name || `Database ${dbIndex + 1}`);
       })
       .catch((err) => console.error("Failed to fetch database name:", err));
   }, []);
 
-  // Fetch all fields on initial render
   useEffect(() => {
     fetchFields();
   }, []);
 
-  // Automatically generate a unique Field Name when adding a new field
   useEffect(() => {
     if (!editingField) {
       setNewField((prev) => ({
         ...prev,
-        name: generateUniqueCode(), // Generate a unique Field Name
+        name: generateUniqueCode(),
       }));
     }
   }, [editingField]);
 
-  // Fetch existing fields from the server
   const fetchFields = async () => {
     const response = await fetch("/api/fields3", { method: "GET" });
     const data = await response.json();
     setFields(data);
   };
 
-  // Function to generate a unique Field Name
   const generateUniqueCode = () => {
     return `field_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
   };
 
-  // Handle adding a new field
   const addField = async (e) => {
     e.preventDefault();
     const response = await fetch("/api/fields3", {
@@ -72,12 +69,12 @@ export default function Fields() {
         type: "text",
         options: [],
       });
+      setNewFieldTempValue("");
     } else {
       console.error("Failed to add field");
     }
   };
 
-  // Handle updating an existing field
   const updateField = async (e) => {
     e.preventDefault();
     const response = await fetch("/api/fields3", {
@@ -89,12 +86,12 @@ export default function Fields() {
     if (response.ok) {
       await fetchFields();
       setEditingField(null);
+      setEditingFieldTempValue("");
     } else {
       console.error("Failed to update field");
     }
   };
 
-  // Handle deleting a field
   const deleteField = async (id, name) => {
     const response = await fetch("/api/fields3", {
       method: "DELETE",
@@ -109,7 +106,6 @@ export default function Fields() {
     }
   };
 
-  // Handle drag-and-drop reordering
   const onDragEnd = async (result) => {
     if (!result.destination) return;
 
@@ -119,7 +115,6 @@ export default function Fields() {
 
     setFields(reorderedFields);
 
-    // Optionally update the order in the backend
     await fetch("/api/fields3/reorder3", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -129,38 +124,32 @@ export default function Fields() {
 
   return (
     <div className="min-h-screen p-8 bg-background">
-      {/* Navigation Links */}
+      {/* Navigation */}
       <Link
         href="/"
-        className="bg-blue-800 hover:bg-blue-600 px-2 py-2 rounded-md mt-4 text-sm align-self text-white"
+        className="bg-blue-800 hover:bg-blue-600 px-2 py-2 rounded-md mt-4 text-sm text-white"
       >
         Back
       </Link>
       <Link
         href="/customers3"
-        className="bg-blue-800 hover:bg-blue-600 px-2 py-2 ml-8 rounded-md mt-4 text-sm align-self text-white"
+        className="bg-blue-800 hover:bg-blue-600 px-2 py-2 ml-8 rounded-md mt-4 text-sm text-white"
       >
         Go To {dbName} Records
       </Link>
+
+      {/* Header */}
       <div className="flex items-center gap-1 mt-4 mb-4">
-        <h1 className="text-2xl  ">
-          <span className="text-red-600 font-bold"> {dbName} Design</span>
+        <h1 className="text-2xl">
+          <span className="text-red-600 font-bold">{dbName} Design</span>
         </h1>
-        {/*<h1 className="text-3xl font-bold ">Database 3 Design</h1>*/}
-        {/*<Image
-          src="/Adb.png" // Replace with your image path
-          alt="Database Icon"
-          width={40} // Adjust width as needed
-          height={40} // Adjust height as needed
-          className="bg-transparent"
-        />*/}
       </div>
-      {/* Add New Field Form */}
+
+      {/* Add Field */}
       {!editingField && (
         <form onSubmit={addField} className="mb-6">
-          <h2 className="mb-1 text-xl font-semibold ">Add New Label</h2>
+          <h2 className="mb-1 text-xl font-semibold">Add New Label</h2>
 
-          {/* Field Label Input */}
           <input
             type="text"
             placeholder="Label"
@@ -172,7 +161,6 @@ export default function Fields() {
             required
           />
 
-          {/* Field Type Selection */}
           <select
             value={newField.type}
             onChange={(e) => setNewField({ ...newField, type: e.target.value })}
@@ -184,28 +172,62 @@ export default function Fields() {
             <option value="date">Date</option>
             <option value="textarea">Long Text</option>
             <option value="select">Dropdown</option>
-            <option value="url">URL</option> {/* 👈 Added URL option */}
+            <option value="url">URL</option>
           </select>
 
-          {/* Input for Dropdown Options */}
+          {/* 🔧 Augmented Dropdown Options Input */}
           {newField.type === "select" && (
-            <div className="">
+            <div>
               <input
                 type="text"
-                placeholder="Comma-separated options"
-                value={newField.options.join(", ")}
-                onChange={(e) =>
-                  setNewField({
-                    ...newField,
-                    options: e.target.value.split(",").map((opt) => opt.trim()),
-                  })
-                }
-                className="border p-2 rounded w-full mt-2"
+                placeholder="Type option and press comma"
+                value={newFieldTempValue}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value.endsWith(",")) {
+                    const newOption = value.slice(0, -1).trim();
+                    if (newOption && !newField.options.includes(newOption)) {
+                      setNewField((prev) => ({
+                        ...prev,
+                        options: [...prev.options, newOption],
+                      }));
+                    }
+                    setNewFieldTempValue("");
+                  } else {
+                    setNewFieldTempValue(value);
+                  }
+                }}
+                className="bg-white border p-2 rounded w-full mt-2"
               />
+
+              {newField.options.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {newField.options.map((opt, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center bg-blue-100 text-blue-900 px-2 py-1 rounded-full text-sm"
+                    >
+                      {opt}
+                      <button
+                        type="button"
+                        className="ml-1 text-blue-600 hover:text-red-600"
+                        onClick={() => {
+                          setNewField((prev) => ({
+                            ...prev,
+                            options: prev.options.filter((o) => o !== opt),
+                          }));
+                        }}
+                      >
+                        ❌
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
-          {/* Input for URL */}
+          {/* URL input */}
           {newField.type === "url" && (
             <div className="hidden">
               <input
@@ -218,7 +240,6 @@ export default function Fields() {
                 className="border p-2 rounded w-full mt-2"
                 required
               />
-              {/* Display the clickable URL preview */}
               {newField.value && (
                 <p className="mt-2">
                   Preview:{" "}
@@ -235,7 +256,6 @@ export default function Fields() {
             </div>
           )}
 
-          {/* Add Field Button */}
           <button
             type="submit"
             className="bg-blue-800 hover:bg-blue-600 text-white mt-3 px-4 py-2 rounded"
@@ -245,10 +265,10 @@ export default function Fields() {
         </form>
       )}
 
-      {/* Edit Field Form */}
+      {/* Edit Field */}
       {editingField && (
         <form onSubmit={updateField} className="mb-6">
-          <h2 className="mb-1 text-xl font-semibold ">Edit Field</h2>
+          <h2 className="mb-1 text-xl font-semibold">Edit Field</h2>
           <input
             type="text"
             placeholder="Label"
@@ -272,28 +292,65 @@ export default function Fields() {
             <option value="date">Date</option>
             <option value="textarea">Long Text</option>
             <option value="select">Dropdown</option>
-            <option value="url">URL</option> {/* 👈 Added URL option */}
+            <option value="url">URL</option>
           </select>
 
-          {/* Input for Dropdown Options */}
+          {/* 🔧 Augmented Dropdown Options Input */}
           {editingField.type === "select" && (
             <div>
               <input
                 type="text"
-                placeholder="Comma-separated options"
-                value={editingField.options.join(", ")}
-                onChange={(e) =>
-                  setEditingField({
-                    ...editingField,
-                    options: e.target.value.split(",").map((opt) => opt.trim()),
-                  })
-                }
+                placeholder="Type option and press comma"
+                value={editingFieldTempValue}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value.endsWith(",")) {
+                    const newOption = value.slice(0, -1).trim();
+                    if (
+                      newOption &&
+                      !editingField.options.includes(newOption)
+                    ) {
+                      setEditingField((prev) => ({
+                        ...prev,
+                        options: [...prev.options, newOption],
+                      }));
+                    }
+                    setEditingFieldTempValue("");
+                  } else {
+                    setEditingFieldTempValue(value);
+                  }
+                }}
                 className="bg-white border p-2 rounded w-full mt-2"
               />
+
+              {editingField.options.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {editingField.options.map((opt, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center bg-blue-100 text-blue-900 px-2 py-1 rounded-full text-sm"
+                    >
+                      {opt}
+                      <button
+                        type="button"
+                        className="ml-1 text-blue-600 hover:text-red-600"
+                        onClick={() => {
+                          setEditingField((prev) => ({
+                            ...prev,
+                            options: prev.options.filter((o) => o !== opt),
+                          }));
+                        }}
+                      >
+                        ❌
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
-          {/* Input for URL */}
+          {/* URL input */}
           {editingField.type === "url" && (
             <div className="hidden">
               <input
@@ -306,7 +363,6 @@ export default function Fields() {
                 className="border p-2 rounded w-full mt-2"
                 required
               />
-              {/* Display the clickable URL preview */}
               {editingField.value && (
                 <p className="mt-2">
                   Preview:{" "}
@@ -378,8 +434,10 @@ export default function Fields() {
                         <td className="border p-2">
                           <div className="grid columns-1 gap-4">
                             <button
-                              onClick={() => setEditingField(field)}
-                              className=""
+                              onClick={() => {
+                                setEditingField(field);
+                                setEditingFieldTempValue("");
+                              }}
                             >
                               ✍️
                             </button>
@@ -392,7 +450,6 @@ export default function Fields() {
                                   deleteField(field._id, field.name);
                                 }
                               }}
-                              className=""
                             >
                               ❌
                             </button>

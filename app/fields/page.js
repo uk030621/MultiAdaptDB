@@ -199,9 +199,29 @@ export default function Fields() {
                 }}
                 className="bg-white border p-2 rounded w-full mt-2"
               />
+
               {newField.options.length > 0 && (
-                <div className="text-sm mt-1 text-gray-700">
-                  Options: {newField.options.join(", ")}
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {newField.options.map((opt, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center bg-blue-100 text-blue-900 px-2 py-1 rounded-full text-sm"
+                    >
+                      {opt}
+                      <button
+                        type="button"
+                        className="ml-1 text-blue-600 hover:text-red-600"
+                        onClick={() => {
+                          setNewField((prev) => ({
+                            ...prev,
+                            options: prev.options.filter((o) => o !== opt),
+                          }));
+                        }}
+                      >
+                        ❌
+                      </button>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -302,9 +322,29 @@ export default function Fields() {
                 }}
                 className="bg-white border p-2 rounded w-full mt-2"
               />
+
               {editingField.options.length > 0 && (
-                <div className="text-sm mt-1 text-gray-700">
-                  Options: {editingField.options.join(", ")}
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {editingField.options.map((opt, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center bg-blue-100 text-blue-900 px-2 py-1 rounded-full text-sm"
+                    >
+                      {opt}
+                      <button
+                        type="button"
+                        className="ml-1 text-blue-600 hover:text-red-600"
+                        onClick={() => {
+                          setEditingField((prev) => ({
+                            ...prev,
+                            options: prev.options.filter((o) => o !== opt),
+                          }));
+                        }}
+                      >
+                        ❌
+                      </button>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
