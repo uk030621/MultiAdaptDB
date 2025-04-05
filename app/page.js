@@ -121,16 +121,34 @@ export default function Home() {
                 <strong>Sign In:</strong> Use your Google account to sign in
                 securely.
               </li>
+
+              <li>
+                <strong>Database Design:</strong> Modify fields dynamically.
+                Navigate to view, add, edit, and delete fields.
+              </li>
+              <li>
+                <strong>Field Type:</strong> Remember to select the most
+                applicable type when adding or amending field lables. For
+                example for Name choose Text, for Email choose Email. For
+                Website choose URL.
+              </li>
               <li>
                 <strong>Database Records:</strong> Navigate to view, add, edit,
                 and delete records.
               </li>
               <li>
-                <strong>Database Design:</strong> Modify fields dynamically.
-              </li>
-              <li>
                 <strong>Fast Search:</strong> Quickly find data using the search
                 bar.
+              </li>
+              {/* Add new feature directly in the dropdown */}
+              <li>
+                <strong>Heading Adjustment:</strong> Use drag-and-drop to
+                reposition labels.
+              </li>
+              <li>
+                <strong>Multiple Databases:</strong> Seamlessly manage up to
+                three user-defined databases. Each database can be assigned an
+                approriate name.
               </li>
             </ul>
           </div>
@@ -143,15 +161,15 @@ export default function Home() {
         <>
           <p>Welcome, {session.user.name}!</p>
           {session.user.email === adminEmail && (
-            <div className="mt-2 w-fit max-w-md px-6 py-2 bg-yellow-100 border-2 shadow-md rounded">
-              <h2 className="text-lg font-bold mb-2">
-                Admin - Manage Allowed Emails
+            <div className="mt-2 w-fit ml-5 mr-5 max-w-md px-6 py-2 bg-yellow-100 border-2 shadow-md rounded">
+              <h2 className="text-base font-bold mb-2">
+                Manage Allowed Emails
               </h2>
               <ul className="mb-4">
                 {allowedEmails.map((email) => (
                   <li
                     key={email}
-                    className="flex justify-between items-center mb-2"
+                    className="flex text-sm justify-between items-center mb-2"
                   >
                     <span>{email}</span>
                     {email !== adminEmail && (
@@ -170,11 +188,11 @@ export default function Home() {
                 placeholder="Enter email"
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
-                className="bg-white border p-2 rounded w-full mb-2"
+                className="bg-white text-sm border p-2 rounded w-full mb-2"
               />
               <button
                 onClick={addEmail}
-                className="bg-green-800 hover:bg-green-600 text-sm text-white px-4 py-2 rounded w-full"
+                className="bg-green-800 hover:bg-green-600 text-sm text-white px-4 py-1 rounded w-full"
               >
                 Add Email
               </button>
@@ -183,7 +201,7 @@ export default function Home() {
           {/* Display and update database names in a dropdown */}
           <div className="mt-3 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-auto">
             <details className="bg-yellow-100 border-2 shadow-md rounded p-4 ml-5 mr-5">
-              <summary className="cursor-pointer text-lg font-bold text-center text-blue-700">
+              <summary className="cursor-pointer text-base font-bold text-center text-blue-700">
                 Assign Database Name
               </summary>
               <div className="mt-4">
@@ -204,7 +222,7 @@ export default function Home() {
                     />
                     <button
                       onClick={() => updateDbName(index)}
-                      className="bg-blue-700 text-white px-4 py-2 rounded mt-2 hover:bg-blue-600 w-full md:w-auto"
+                      className="bg-blue-700 text-white px-4 py-1 rounded mt-2 hover:bg-blue-600 w-full md:w-auto text-sm"
                     >
                       Update Name
                     </button>
@@ -286,7 +304,7 @@ export default function Home() {
           </div>*/}
           <button
             onClick={() => signOut()}
-            className="w-3/4  text-sm mt-4 px-4 py-2 bg-red-700 hover:bg-red-500 text-white rounded"
+            className="w-44  text-sm mt-4 px-4 py-2 bg-red-700 hover:bg-red-500 text-white rounded"
           >
             Sign Out
           </button>
