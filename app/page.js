@@ -129,8 +129,8 @@ export default function Home() {
               <li>
                 <strong>Field Type:</strong> Remember to select the most
                 applicable type when adding or amending field lables. For
-                example for Name choose Text, for Email choose Email. For
-                Website choose URL.
+                example: Name choose Text, Email choose Email, Website choose
+                URL.
               </li>
               <li>
                 <strong>Database Records:</strong> Navigate to view, add, edit,
