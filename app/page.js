@@ -113,7 +113,13 @@ export default function Home() {
         </button>
         {showGuide && (
           <div className="mt-2 bg-white shadow-lg rounded p-4">
-            <h2 className="text-lg font-semibold mb-4">
+            <Link
+              className="bg-amber-200 px-4 py-2 rounded-lg mt-2 "
+              href="\contact"
+            >
+              Contact Developer
+            </Link>
+            <h2 className="text-lg font-semibold mb-4 mt-4">
               How to Use the System
             </h2>
             <ul className="list-disc pl-5 space-y-2">

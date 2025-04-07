@@ -17,3 +17,12 @@
   opacity: 0.4; /* Apply opacity only to the background */
   z-index: -1; /* Place pseudo-element behind content */
 }
+
+form > div {
+  @apply flex flex-col gap-2;
+}
+
+input,
+textarea {
+  @apply shadow-md px-6 py-2 border border-slate-300;
+}
