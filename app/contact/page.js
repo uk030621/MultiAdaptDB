@@ -1,3 +1,4 @@
+//app/contact/page.js
 "use client";
 import ContactForm from "@/components/ContactForm";
 import Link from "next/link";
