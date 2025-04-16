@@ -12,17 +12,23 @@ const pages = [
   "/customers2",
   "/fields3",
   "/customers3",
-]; // Define your routes here
+];
 
 const SwipeNavigationProvider = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Function to check if swipe started inside a scrollable container
+  // Check if the swipe or keypress started inside an input/textarea/contentEditable
+  const isInsideEditableField = (target) => {
+    const tagName = target.tagName?.toLowerCase();
+    const isEditableTag = tagName === "input" || tagName === "textarea";
+    const isContentEditable = target.isContentEditable;
+    return isEditableTag || isContentEditable;
+  };
+
   const isInsideScrollable = (target) =>
     target.closest(".overflow-x-auto") !== null;
 
-  // Function to navigate between pages
   const navigateTo = useCallback(
     (direction) => {
       const currentIndex = pages.indexOf(pathname);
@@ -37,21 +43,28 @@ const SwipeNavigationProvider = ({ children }) => {
     [pathname, router]
   );
 
-  // Handle swipe gestures
   const handlers = useSwipeable({
     onSwipedLeft: (event) => {
-      if (!isInsideScrollable(event.event.target)) navigateTo("left");
+      const target = event.event.target;
+      if (!isInsideScrollable(target) && !isInsideEditableField(target)) {
+        navigateTo("left");
+      }
     },
     onSwipedRight: (event) => {
-      if (!isInsideScrollable(event.event.target)) navigateTo("right");
+      const target = event.event.target;
+      if (!isInsideScrollable(target) && !isInsideEditableField(target)) {
+        navigateTo("right");
+      }
     },
-    preventScrollOnSwipe: false, // ✅ Allow normal scrolling
+    preventScrollOnSwipe: false,
     trackMouse: true,
   });
 
-  // Handle keyboard navigation (left & right arrows)
   useEffect(() => {
     const handleKeyDown = (e) => {
+      // Skip if focused inside editable fields
+      if (isInsideEditableField(document.activeElement)) return;
+
       if (e.key === "ArrowRight") {
         navigateTo("left");
       } else if (e.key === "ArrowLeft") {

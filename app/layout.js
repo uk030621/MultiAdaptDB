@@ -1,6 +1,6 @@
 import "./globals.css";
 import Provider from "./provider";
-//import SwipeNavigationProvider from "./SwipeNavigationProvider";
+import SwipeNavigationProvider from "./SwipeNavigationProvider";
 
 export const metadata = {
   title: "Flexible Database",
@@ -20,7 +20,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Provider>{children}</Provider>
+        <Provider>
+          <SwipeNavigationProvider>{children}</SwipeNavigationProvider>
+        </Provider>
       </body>
     </html>
   );
