@@ -316,19 +316,35 @@ export default function Home() {
           </button>
         </>
       ) : (
-        <button
-          onClick={() => signIn("google")}
-          className="text-sm px-4 py-2 bg-blue-700 hover:bg-blue-500 text-white rounded flex items-center"
-        >
-          <Image
-            src="/G.png" // Replace with the path to your Google logo
-            alt="Google logo"
-            width={30} // Set the width of the image
-            height={30} // Set the height of the image
-            className="rounded-md mr-2"
-          />
-          Sign In with Google
-        </button>
+        <div className="grid columns-1">
+          <button
+            onClick={() => signIn("google")}
+            className="text-lg px-4 py-2 bg-blue-700 hover:bg-blue-500 text-white rounded flex items-center justify-center"
+          >
+            <Image
+              src="/G.png" // Replace with the path to your Google logo
+              alt="Google logo"
+              width={30} // Set the width of the image
+              height={30} // Set the height of the image
+              className="rounded-md mr-2"
+            />
+            Sign In with Google
+          </button>
+
+          {/* Friendly Link to Create a Google Account */}
+          <p className="mt-2 text-sm text-gray-600">
+            Do not have a Google account?{" "}
+            <Link
+              href="https://support.google.com/accounts/answer/27441?hl=en"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              Create one here
+            </Link>
+            .
+          </p>
+        </div>
       )}
     </div>
   );
