@@ -214,8 +214,8 @@ export default function Home() {
             </div>
           )}
           {/* Display and update database names in a dropdown */}
-          <div className="mt-3 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-auto">
-            <details className="bg-yellow-100 border-2 w-fit shadow-md rounded p-4 ml-5 mr-5">
+          <div className="mt-3 w-fit sm:w-3/4 md:w-1/2 lg:w-1/3 mx-auto">
+            <details className="bg-yellow-100 border-2 shadow-md rounded p-4 ml-5 mr-5">
               <summary className="cursor-pointer text-base font-bold text-center text-blue-700">
                 Assign Database Name
               </summary>

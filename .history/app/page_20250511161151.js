@@ -6,7 +6,6 @@ import Image from "next/image";
 
 export default function Home() {
   const { data: session, status } = useSession();
-  const isAdmin = session?.user?.isAdmin;
   const [showGuide, setShowGuide] = useState(false);
   const [allowedEmails, setAllowedEmails] = useState([]);
   const [newEmail, setNewEmail] = useState("");
@@ -120,14 +119,12 @@ export default function Home() {
             >
               Contact Developer
             </Link>
-            {isAdmin && (
-              <Link
-                className="bg-amber-200 px-4 py-2 rounded-lg mt-2 ml-6"
-                href="/contactreply"
-              >
-                Submissions
-              </Link>
-            )}
+            <Link
+              className="bg-amber-200 px-4 py-2 rounded-lg mt-2 ml-6 "
+              href="\contactreply"
+            >
+              Submissions
+            </Link>
             <h2 className="text-lg font-semibold mb-4 mt-4">
               How to Use the System
             </h2>
@@ -215,7 +212,7 @@ export default function Home() {
           )}
           {/* Display and update database names in a dropdown */}
           <div className="mt-3 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-auto">
-            <details className="bg-yellow-100 border-2 w-fit shadow-md rounded p-4 ml-5 mr-5">
+            <details className="bg-yellow-100 border-2 shadow-md rounded p-4 ml-5 mr-5">
               <summary className="cursor-pointer text-base font-bold text-center text-blue-700">
                 Assign Database Name
               </summary>
