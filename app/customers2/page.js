@@ -292,6 +292,10 @@ export default function Customers() {
                           </a>
                         ) : field.type === "date" ? (
                           formatDate(customer[field.name])
+                        ) : field.type === "textarea" ? (
+                          <div className="textarea-content">
+                            {customer[field.name]}
+                          </div>
                         ) : (
                           customer[field.name] || ""
                         )}

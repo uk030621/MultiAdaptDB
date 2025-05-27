@@ -18,6 +18,11 @@
   z-index: -1; /* Place pseudo-element behind content */
 }
 
+.textarea-content {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
 form > div {
   @apply flex flex-col gap-2;
 }
