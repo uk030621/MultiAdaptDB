@@ -148,7 +148,7 @@ export default function Customers() {
         />*/}
       </div>
       {/* Fast Search */}
-      <div className="flex items-center gap-2 mb-4">
+      <div className="flex items-center gap-2 mb-4 fix-container">
         <input
           type="text"
           placeholder="Search records..."

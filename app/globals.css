@@ -23,6 +23,14 @@
   word-wrap: break-word;
 }
 
+.fix-container {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1000;
+  padding: 10px;
+}
+
 form > div {
   @apply flex flex-col gap-2;
 }

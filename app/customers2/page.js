@@ -148,7 +148,7 @@ export default function Customers() {
         />*/}
       </div>
       {/* Fast Search */}
-      <div className="flex items-center gap-2 mb-4">
+      <div className="flex items-center gap-2 mb-4 fix-container">
         <input
           type="text"
           placeholder="Search records..."
@@ -256,9 +256,9 @@ export default function Customers() {
           <h2 className="text-xl text-red-500 font-bold mb-2 underline">
             Records
           </h2>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto overflow-y-auto max-h-[80vh]">
             <table className="w-full border-collapse bg-white rounded shadow">
-              <thead className="bg-slate-200">
+              <thead className="sticky top-0 bg-slate-200 z-10">
                 <tr>
                   {fields.map((field) => (
                     <th key={field._id} className="border p-2 text-left">
